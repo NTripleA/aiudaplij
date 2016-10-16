@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnityEngine.SceneManagement;
 
 public class GasBottleScript : MonoBehaviour {
 
@@ -8,16 +9,17 @@ public class GasBottleScript : MonoBehaviour {
     int i = 0;
     bool click = false;
     public static bool lost = false;
+    public GameObject go;
 
 
     // Use this for initialization
     void Start () {
-
+        
     }
 	
 	// Update is called once per frame
 	void Update () {
-
+        this.go = go;
         i++;
         if (click) {
 
@@ -53,19 +55,14 @@ public class GasBottleScript : MonoBehaviour {
 
         if(!GetComponent<Animation>().IsPlaying("Flip Success") && !lost)
         {
-            //  YouWon();
-            long time = 50000;
-            while(time != 0)
-            {
-                time--;
-            }
-
-            Application.LoadLevel("Door");
+            
+            StartCoroutine(MyMethod());
+            SceneManager.LoadScene("Door");
         }       
 
     }
 
-    void OnMouseDown()
+    public void OnMouseDown()
     {
         click = true;
     }
@@ -82,7 +79,7 @@ public class GasBottleScript : MonoBehaviour {
     {   
         Destroy(this.gameObject);
         Destroy(GameObject.FindGameObjectWithTag("Table"));
-      //  Spawn();
+        Spawn();
         
 
     }
@@ -90,7 +87,15 @@ public class GasBottleScript : MonoBehaviour {
     public void Spawn()
     {
 
-        Instantiate(GameObject.Find("TitleGUI"));
+        go.SetActive(true);
         
+    }
+
+    IEnumerator MyMethod()
+    {
+        YouWon();
+        Debug.Log("Before Waiting 2 seconds");
+        yield return new WaitForSeconds(2);
+        Debug.Log("After Waiting 2 Seconds");
     }
 }
